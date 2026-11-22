@@ -42,3 +42,15 @@ bind('#signature', async () => {
   exportLink.hidden = false;
   status.textContent = `证据已签发 · 待复核 ${result.open_items} 票`;
 });
+
+const handoverChecksum = document.querySelector('#handover-checksum');
+const handoverLink = document.querySelector('#handover-detail');
+bind('#handover', async form => {
+  const previous_batch = form.querySelector('#previous-batch').value;
+  const incoming_batch = form.querySelector('#incoming-batch').value;
+  const result = await post('/api/handovers', {previous_batch, incoming_batch});
+  handoverChecksum.value = `交接 ${result.reused ? '复用' : '入账'} · 净差 ${result.total_difference_g/1000} kg · 短少 ${result.short_count} 辆 / 溢余 ${result.over_count} 辆`;
+  handoverLink.href = `/api/handovers/${result.digest}`;
+  handoverLink.hidden = false;
+  status.textContent = '交接差已入账一次，证据单签发时随件带出两班原件';
+});

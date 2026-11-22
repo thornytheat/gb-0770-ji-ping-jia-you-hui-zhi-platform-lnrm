@@ -11,6 +11,9 @@ class ShiftBook:
             db.execute('CREATE TABLE IF NOT EXISTS shifts (digest TEXT PRIMARY KEY, manifest TEXT NOT NULL)')
             db.execute('CREATE TABLE IF NOT EXISTS stage_rows (digest TEXT NOT NULL REFERENCES shifts(digest), phase TEXT NOT NULL, body TEXT NOT NULL, PRIMARY KEY(digest,phase))')
             db.execute('CREATE TABLE IF NOT EXISTS signatures (digest TEXT PRIMARY KEY REFERENCES shifts(digest), checksum TEXT NOT NULL)')
+            db.execute('CREATE TABLE IF NOT EXISTS handovers '
+                       '(digest TEXT PRIMARY KEY, previous_batch TEXT NOT NULL REFERENCES shifts(digest), '
+                       'incoming_batch TEXT NOT NULL UNIQUE REFERENCES shifts(digest), body TEXT NOT NULL)')
 
     @contextmanager
     def connection(self):

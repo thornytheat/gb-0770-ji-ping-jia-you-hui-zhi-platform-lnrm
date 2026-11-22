@@ -8,7 +8,7 @@ from app.ledger.replay import list_shifts
 from app.shift import compute
 
 SECTIONS = {'balance':'库存和签单对账','intake':'仪表与回执采信','versions':'罐车量程配置选版','readings':'两端读数重建',
-            'mass':'密度换算与误差带','shifts':'批次留档复跑','sign':'加注证据签发'}
+            'mass':'密度换算与误差带','shifts':'批次留档复跑','handover':'两班交接对账','sign':'加注证据签发'}
 display = Blueprint('ramp',__name__)
 
 
@@ -24,6 +24,6 @@ def view(tab='balance'):
         raise RampError('SAMPLE',404)
     name = request.args.get('sample','dirty')
     data = compute(sample_set(name),'balance')
-    runs = list_shifts(current_app.book) if tab in ('shifts','sign') else []
+    runs = list_shifts(current_app.book) if tab in ('shifts','sign','handover') else []
     return render_template('base.html',section=tab,tabs=SECTIONS,sample=name,data=data,rev=RULESET,
                            runs=runs,current=request.args.get('batch',''))

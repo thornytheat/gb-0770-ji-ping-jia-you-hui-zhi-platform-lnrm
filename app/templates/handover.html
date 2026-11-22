@@ -1,0 +1,7 @@
+<div class="double-book"><section class="panel"><h3>两班交接挂接</h3>
+{% if runs %}<form id="handover"><label for="previous-batch">上班（签单期末留痕）</label><select id="previous-batch">{% for run in runs %}<option value="{{ run.batch }}">{{ run.batch[:15] }} · 期末差 {{ run.totals.difference_g|kg }} kg</option>{% endfor %}</select>
+<label for="incoming-batch">接班（按复秤实数开账）</label><select id="incoming-batch">{% for run in runs %}<option value="{{ run.batch }}">{{ run.batch[:15] }} · 期末差 {{ run.totals.difference_g|kg }} kg</option>{% endfor %}</select>
+<button>建立交接对账</button></form>
+<p><output id="handover-checksum"></output></p>
+<a id="handover-detail" hidden>查看交接对账与两班原件</a>{% else %}<p>请先在批次留档页归档两班交班账。</p>{% endif %}</section>
+<section class="panel"><h3>交接记账口径</h3><ul><li>接班本班余额只认复秤期初，不沿用上签期末</li><li>交接差＝接班复秤期初−上班签单期末，仅入交接账一次</li><li>短少挂上班签单追责，原件只读不回改</li><li>同一对班次重复提交复用同一交接，不重复记差</li><li>证据单签发后接班批次锁定，不能再补建交接</li></ul></section></div>
